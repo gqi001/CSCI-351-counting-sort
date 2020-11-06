@@ -25,6 +25,7 @@ csort(unsigned const k,
   {
 #pragma omp for
     for (unsigned i = 0; i < n; i++) {
+# pragma omp critical 
       count[in[i]]++;
     }
   }
@@ -39,6 +40,7 @@ csort(unsigned const k,
 #pragma omp parallel for num_threads(2)
   
   for (unsigned i = 0; i < n; i++) {
+# pragma omp critical 
     out[count[in[i]]] = in[i];
     count[in[i]]++;
   }
@@ -55,7 +57,7 @@ main(int argc, char *argv[]) {
   unsigned n = strtol(argv[1], NULL, 10);
 
   /* Get key size from command line */
-  unsigned k = strtol(argv[1], NULL, 10);
+  unsigned k = strtol(argv[2], NULL, 10);
 
   /* Allocate memory */
   unsigned * const a = malloc(n * sizeof(*a));
